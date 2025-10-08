@@ -2,6 +2,8 @@
 import streamlit as st
 from config.openai_config import client
 from utils.prompt_builder import build_travel_prompt
+from utils.map_utils import get_coordinates, create_folium_map, calculate_distance, display_map_in_streamlit, create_static_map
+import matplotlib.pyplot as plt
 
 # ------------------------
 # Streamlit App UI
@@ -38,6 +40,56 @@ with st.form(key="travel_form"):
 # ------------------------
 if submit_button:
     with st.spinner("Generating your personalized travel plan..."):
+        # Show route map first
+        if starting_location and destination:
+            with st.spinner("Calculating route and generating map..."):
+                try:
+                    # Get coordinates for both locations
+                    start_coords = get_coordinates(starting_location)
+                    dest_coords = get_coordinates(destination)
+                    
+                    if start_coords and dest_coords:
+                        st.subheader("🗺️ Route Overview")
+                        
+                        # Calculate approximate distance
+                        distance_km = calculate_distance(start_coords, dest_coords)
+                        st.info(f"📍 **Distance**: {distance_km:.1f} km from {starting_location} to {destination}")
+                        
+                        # Try interactive map first, fallback to static map
+                        try:
+                            # Create and display interactive Folium map
+                            folium_map = create_folium_map(start_coords, dest_coords, starting_location, destination)
+                            display_map_in_streamlit(folium_map)
+                            st.caption("🗺️ Interactive Map - You can zoom and pan")
+                        except Exception as map_error:
+                            st.warning("🔄 Using static map - interactive features unavailable")
+                            # Fallback to static map
+                            static_fig = create_static_map(start_coords, dest_coords, starting_location, destination)
+                            st.pyplot(static_fig)
+                            st.caption("📍 Static Route Map")
+                        
+                        # Show travel time estimate
+                        if travel_mode == "Train":
+                            approx_time = distance_km / 50  # avg train speed
+                        elif travel_mode == "Bus":
+                            approx_time = distance_km / 40  # avg bus speed  
+                        elif travel_mode == "Flight":
+                            approx_time = distance_km / 500  # avg flight speed
+                        else:  # Car
+                            approx_time = distance_km / 60
+                            
+                        st.write(f"⏱️ **Estimated travel time**: {approx_time:.1f} hours by {travel_mode}")
+                        
+                        # Store distance and time for download button
+                        st.session_state.distance_km = distance_km
+                        st.session_state.approx_time = approx_time
+                    else:
+                        st.warning("⚠️ Could not find coordinates for the locations. Check spelling and try again.")
+                        
+                except Exception as e:
+                    st.warning(f"⚠️ Could not generate route map: {str(e)[:100]}... but itinerary will still be created.")
+
+        # Generate itinerary
         prompt = build_travel_prompt(
             destination=destination,
             duration_days=duration_days,
@@ -61,5 +113,15 @@ if submit_button:
             itinerary = response.output_text
             st.success("🎉 Your AI Travel Itinerary is ready!")
             st.markdown(itinerary)
+            
+            # Add map download option
+            if starting_location and destination and 'distance_km' in st.session_state:
+                st.download_button(
+                    label="📱 Save Route Info",
+                    data=f"Route: {starting_location} to {destination}\nDistance: {st.session_state.distance_km:.1f} km\nTravel Time: {st.session_state.approx_time:.1f} hours\nTravel Mode: {travel_mode}",
+                    file_name="travel_route.txt",
+                    mime="text/plain"
+                )
+                
         except Exception as e:
             st.error(f"❌ Failed to generate itinerary: {e}")
