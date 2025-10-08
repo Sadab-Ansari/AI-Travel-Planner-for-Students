@@ -187,6 +187,12 @@ def render_welcome_section():
     st.markdown("---")
     st.info("💡 **Ready to plan?** Fill out the form above and click 'Generate Travel Plan'!")
 
+def render_itinerary_content(itinerary):
+    """Render the itinerary content with improved styling."""
+    st.markdown('<div class="itinerary-content">', unsafe_allow_html=True)
+    st.markdown(itinerary)
+    st.markdown('</div>', unsafe_allow_html=True)
+
 def render_footer():
     """Render the app footer."""
     st.markdown("---")

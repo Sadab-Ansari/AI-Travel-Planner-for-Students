@@ -86,34 +86,42 @@ def display_budget_breakdown():
         )
         
         fig_pie.update_layout(
-            height=500,
+            height=400,  # Reduced height to prevent overflow
             showlegend=False,
-            font=dict(size=12)
+            font=dict(size=12),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            margin=dict(t=30, b=30, l=30, r=30)  # Add margins to prevent clipping
         )
         
-        st.plotly_chart(fig_pie, use_container_width=True)
+        # Use config to disable zoom and add other controls
+        st.plotly_chart(fig_pie, use_container_width=True, config={
+            'displayModeBar': True,
+            'displaylogo': False,
+            'modeBarButtonsToRemove': ['zoom2d', 'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d', 'autoScale2d', 'resetScale2d']
+        })
     
     with table_col:
-        # Detailed Budget Table
+        # Detailed Budget Table with improved styling
         st.subheader("Breakdown Details")
+        st.markdown('<div class="budget-table-container">', unsafe_allow_html=True)
         
         # Calculate percentages
         df_display = df.copy()
         df_display['percentage'] = (df_display['amount'] / total_budget * 100).round(1)
-        df_display['amount_display'] = df_display['amount'].apply(lambda x: f"₹{x:,}")
-        df_display['percentage_display'] = df_display['percentage'].apply(lambda x: f"{x}%")
         
-        # Display as a nice table
+        # Display as a nice table with custom styling
         for _, row in df_display.iterrows():
-            with st.container():
-                cols = st.columns([3, 2, 1])
-                with cols[0]:
-                    st.write(f"**{row['category']}**")
-                with cols[1]:
-                    st.write(row['amount_display'])
-                with cols[2]:
-                    st.write(row['percentage_display'])
-                st.progress(row['percentage'] / 100)
+            st.markdown(f"""
+            <div class="budget-table-row">
+                <div class="budget-category">{row['category']}</div>
+                <div class="budget-amount">₹{row['amount']:,}</div>
+                <div class="budget-percentage">{row['percentage']}%</div>
+            </div>
+            """, unsafe_allow_html=True)
+            st.progress(row['percentage'] / 100)
+        
+        st.markdown('</div>', unsafe_allow_html=True)
     
     # Budget Planning Tips
     st.subheader("💡 Budget Tips for Students")
