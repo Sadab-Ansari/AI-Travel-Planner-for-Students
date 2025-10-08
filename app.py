@@ -3,6 +3,10 @@ import streamlit as st
 from config.openai_config import client
 from utils.prompt_builder import build_travel_prompt
 from utils.map_utils import get_coordinates, create_folium_map, calculate_distance, display_map_in_streamlit, create_static_map
+from utils.budget_utils import display_budget_breakdown
+from utils.packing_utils import generate_packing_list, display_packing_checklist
+from utils.weather_utils import get_weather_forecast, display_weather_forecast, get_weather_packing_tips
+from utils.safety_utils import display_safety_dashboard  # NEW IMPORT
 import matplotlib.pyplot as plt
 
 # ------------------------
@@ -112,16 +116,78 @@ if submit_button:
             )
             itinerary = response.output_text
             st.success("🎉 Your AI Travel Itinerary is ready!")
-            st.markdown(itinerary)
             
-            # Add map download option
-            if starting_location and destination and 'distance_km' in st.session_state:
-                st.download_button(
-                    label="📱 Save Route Info",
-                    data=f"Route: {starting_location} to {destination}\nDistance: {st.session_state.distance_km:.1f} km\nTravel Time: {st.session_state.approx_time:.1f} hours\nTravel Mode: {travel_mode}",
-                    file_name="travel_route.txt",
-                    mime="text/plain"
+            # Get weather forecast
+            weather_forecast = None
+            with st.spinner("🌤️ Fetching weather forecast..."):
+                weather_forecast = get_weather_forecast(destination, duration_days)
+            
+            # NEW: Updated tabs with Safety Dashboard
+            itinerary_tab, budget_tab, packing_tab, weather_tab, safety_tab, map_tab = st.tabs(["📅 Itinerary", "💰 Budget", "🎒 Packing", "🌤️ Weather", "🛡️ Safety", "🗺️ Route"])
+            
+            with itinerary_tab:
+                st.markdown(itinerary)
+                
+                # Add map download option
+                if starting_location and destination and 'distance_km' in st.session_state:
+                    st.download_button(
+                        label="📱 Save Route Info",
+                        data=f"Route: {starting_location} to {destination}\nDistance: {st.session_state.distance_km:.1f} km\nTravel Time: {st.session_state.approx_time:.1f} hours\nTravel Mode: {travel_mode}",
+                        file_name="travel_route.txt",
+                        mime="text/plain"
+                    )
+            
+            with budget_tab:
+                # Budget Breakdown Section
+                st.subheader("💰 Budget Analysis")
+                display_budget_breakdown(itinerary, budget)
+                
+            with packing_tab:
+                # Packing Checklist Section
+                packing_items = generate_packing_list(
+                    itinerary_text=itinerary,
+                    destination=destination,
+                    duration_days=duration_days,
+                    interests=interests,
+                    weather_preference=weather_preference
                 )
+                
+                # Add weather-based packing tips
+                if weather_forecast:
+                    weather_tips = get_weather_packing_tips(weather_forecast)
+                    if weather_tips:
+                        st.info("**Weather-based packing suggestions:**")
+                        for tip in weather_tips:
+                            st.write(f"• {tip}")
+                
+                display_packing_checklist(packing_items, duration_days)
+                
+            with weather_tab:
+                # Weather Forecast Section
+                if weather_forecast:
+                    display_weather_forecast(weather_forecast, destination)
+                else:
+                    st.info("🌤️ Weather data unavailable. This could be due to:")
+                    st.write("• Destination name not recognized")
+                    st.write("• Weather API limit reached")
+                    st.write("• Network connectivity issue")
+                    st.write("Try using major city names for better weather data.")
+            
+            with safety_tab:
+                # NEW: Safety Dashboard Section
+                display_safety_dashboard(destination, group_type, special_conditions)
+                
+            with map_tab:
+                # Show map again in its own tab
+                if starting_location and destination:
+                    try:
+                        start_coords = get_coordinates(starting_location)
+                        dest_coords = get_coordinates(destination)
+                        if start_coords and dest_coords:
+                            folium_map = create_folium_map(start_coords, dest_coords, starting_location, destination)
+                            display_map_in_streamlit(folium_map)
+                    except:
+                        st.info("Map unavailable in this view. Check the main itinerary for route details.")
                 
         except Exception as e:
             st.error(f"❌ Failed to generate itinerary: {e}")
