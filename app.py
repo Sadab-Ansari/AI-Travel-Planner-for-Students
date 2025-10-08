@@ -7,7 +7,7 @@ from utils.budget_utils import display_budget_breakdown
 from utils.packing_utils import generate_packing_list, display_packing_checklist
 from utils.weather_utils import get_weather_forecast, display_weather_forecast, get_weather_packing_tips
 from utils.safety_utils import display_safety_dashboard
-from components.ui_components import apply_custom_styles, render_header, render_travel_form, render_welcome_section, render_footer
+from components.ui_components import apply_custom_styles, render_header, render_travel_form, render_welcome_section, render_footer, render_itinerary_content
 from config.constants import APP_NAME, APP_ICON
 import matplotlib.pyplot as plt
 
