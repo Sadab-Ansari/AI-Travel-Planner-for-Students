@@ -1,39 +1,48 @@
 # config/openai_config.py
 """
 Handles OpenAI API configuration and setup.
-Keeps your API key loading separate for cleaner, modular code.
+Compatible with both local .env and Streamlit Cloud secrets.
 """
 
 import os
-from dotenv import load_dotenv
 from openai import OpenAI
 
-# Load environment variables from .env file
-load_dotenv()
+# Optionally use dotenv locally
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass  # dotenv not needed on Streamlit Cloud
 
-# Fetch the API key
+# Try fetching the API key from environment or Streamlit secrets
 api_key = os.getenv("OPENAI_API_KEY")
 
-# Ensure API key is found
 if not api_key:
-    raise ValueError("❌ OpenAI API key not found. Please add it to your .env file.")
+    try:
+        import streamlit as st
+        api_key = st.secrets["OPENAI_API_KEY"]
+    except (ImportError, KeyError):
+        raise ValueError(
+            "OpenAI API key not found. "
+            "Add it to a .env file locally or to Streamlit secrets."
+        )
 
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
 
-# Simple test function to check connection
+# Simple test function
 def test_connection():
     try:
         response = client.responses.create(
             model="gpt-4.1-mini",
             input="Test connection successful?"
         )
-        print("✅ OpenAI connection successful!")
+        print("OpenAI connection successful!")
         print("AI Response:", response.output_text)
     except Exception as e:
-        print("❌ OpenAI connection failed:", e)
+        print("OpenAI connection failed:", e)
 
-# 👇 Add this block to actually run the test
+
 if __name__ == "__main__":
-    print("🔍 Testing OpenAI connection...")
+    print("Testing OpenAI connection...")
     test_connection()
