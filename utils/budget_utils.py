@@ -86,15 +86,15 @@ def display_budget_breakdown():
         )
         
         fig_pie.update_layout(
-            height=400,  # Reduced height to prevent overflow
+            height=400,
             showlegend=False,
             font=dict(size=12),
             paper_bgcolor='rgba(0,0,0,0)',
             plot_bgcolor='rgba(0,0,0,0)',
-            margin=dict(t=30, b=30, l=30, r=30)  # Add margins to prevent clipping
+            margin=dict(t=30, b=30, l=30, r=30)
         )
         
-        # Use config to disable zoom and add other controls
+        # Use config to disable problematic zoom features and ensure proper controls
         st.plotly_chart(fig_pie, use_container_width=True, config={
             'displayModeBar': True,
             'displaylogo': False,
@@ -104,24 +104,21 @@ def display_budget_breakdown():
     with table_col:
         # Detailed Budget Table with improved styling
         st.subheader("Breakdown Details")
-        st.markdown('<div class="budget-table-container">', unsafe_allow_html=True)
         
         # Calculate percentages
         df_display = df.copy()
         df_display['percentage'] = (df_display['amount'] / total_budget * 100).round(1)
         
-        # Display as a nice table with custom styling
+        # Display as a nice table with proper Streamlit components
         for _, row in df_display.iterrows():
-            st.markdown(f"""
-            <div class="budget-table-row">
-                <div class="budget-category">{row['category']}</div>
-                <div class="budget-amount">₹{row['amount']:,}</div>
-                <div class="budget-percentage">{row['percentage']}%</div>
-            </div>
-            """, unsafe_allow_html=True)
+            col1, col2, col3 = st.columns([2, 1, 1])
+            with col1:
+                st.write(f"**{row['category']}**")
+            with col2:
+                st.write(f"₹{row['amount']:,}")
+            with col3:
+                st.write(f"{row['percentage']}%")
             st.progress(row['percentage'] / 100)
-        
-        st.markdown('</div>', unsafe_allow_html=True)
     
     # Budget Planning Tips
     st.subheader("💡 Budget Tips for Students")

@@ -7,15 +7,13 @@ body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal overflow */
 }
 
 /* Main app container */
 .main {
   background: linear-gradient(135deg, #1a202c, #2d3748, #1a202c);
   max-width: 100%;
-  padding-left: 20px;
-  overflow-x: hidden; /* Prevent horizontal overflow */
+  padding: 0 15px; /* Add small left and right padding */
 }
 
 /* Header styling */
@@ -47,9 +45,7 @@ h6 {
   padding: 25px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   border: 1px solid #4a5568;
-  margin-bottom: 20px;
-  margin-left: 20px;
-  max-width: 95%; /* Prevent overflow */
+  margin: 20px 15px; /* Add small left and right margins */
 }
 
 /* Input fields */
@@ -62,7 +58,6 @@ h6 {
   color: #e2e8f0;
   font-size: 16px;
   padding: 12px;
-  width: 100%; /* Ensure full width */
 }
 
 .stTextInput > div > div > input:focus,
@@ -84,7 +79,6 @@ h6 {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Ensure full width */
 }
 
 .stButton > button:hover {
@@ -113,9 +107,8 @@ h6 {
   padding: 15px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid #4a5568;
-  margin-left: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
 }
 
 /* Tabs */
@@ -124,8 +117,7 @@ h6 {
   border-radius: 8px 8px 0 0;
   border: 1px solid #4a5568;
   border-bottom: none;
-  margin-left: 20px;
-  max-width: 95%; /* Prevent overflow */
+  margin: 20px 15px; /* Add small left and right margins */
 }
 
 .stTabs > div > div > div > button {
@@ -177,11 +169,9 @@ h6 {
   border-radius: 0 0 8px 8px;
   border: 1px solid #4a5568;
   padding: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   margin-top: -1px;
-  margin-left: 20px;
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
 }
 
 /* Expander */
@@ -189,10 +179,9 @@ h6 {
   background: rgba(45, 55, 72, 0.4);
   border-radius: 8px;
   border: 1px solid #4a5568;
+  margin: 20px 15px; /* Add small left and right margins */
   margin-bottom: 15px;
-  margin-left: 20px;
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
 }
 
 .stExpander > div:first-child {
@@ -222,9 +211,8 @@ h6 {
   border: 1px solid #3182ce;
   border-radius: 8px;
   color: #90cdf4;
-  margin-left: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
 }
 
 .stAlert-success,
@@ -233,9 +221,8 @@ h6 {
   border: 1px solid #38a169;
   border-radius: 8px;
   color: #9ae6b4;
-  margin-left: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
 }
 
 .stAlert-warning,
@@ -244,9 +231,8 @@ h6 {
   border: 1px solid #dd6b20;
   border-radius: 8px;
   color: #fbd38d;
-  margin-left: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
 }
 
 .stAlert-error,
@@ -255,9 +241,8 @@ h6 {
   border: 1px solid #e53e3e;
   border-radius: 8px;
   color: #fcbba1;
-  margin-left: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
 }
 
 /* Download buttons */
@@ -269,7 +254,6 @@ h6 {
   padding: 10px 16px;
   font-size: 14px;
   font-weight: 500;
-  width: 100%; /* Ensure full width */
 }
 
 .stDownloadButton > button:hover {
@@ -281,23 +265,20 @@ footer {
   background: rgba(26, 32, 44, 0.8);
   border-top: 1px solid #4a5568;
   padding: 20px;
-  margin-top: 30px;
+  margin: 30px 15px 0 15px; /* Add small left and right margins */
   border-radius: 10px 10px 0 0;
-  margin-left: 20px;
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
 }
 
 /* Columns */
 .stColumn {
-  padding: 0 10px;
+  padding: 0 10px; /* Add column padding */
 }
 
 /* Markdown content */
 .stMarkdown {
   line-height: 1.6;
-  margin-left: 20px;
-  max-width: 95%; /* Prevent overflow */
+  margin: 20px 15px; /* Add small left and right margins */
 }
 
 .stMarkdown h1,
@@ -326,10 +307,8 @@ footer {
   background: rgba(45, 55, 72, 0.4);
   border-radius: 8px;
   border: 1px solid #4a5568;
-  margin-left: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   backdrop-filter: blur(5px);
-  max-width: 95%; /* Prevent overflow */
-  overflow-x: auto; /* Allow horizontal scrolling */
 }
 
 .stDataFrame th {
@@ -347,71 +326,33 @@ footer {
   border-radius: 8px;
   border: 1px solid #4a5568;
   padding: 10px;
-  margin-left: 20px;
+  margin: 20px 15px; /* Add small left and right margins */
   backdrop-filter: blur(5px);
-  max-width: 100%; /* Ensure charts fit within container */
-  overflow: hidden; /* Prevent overflow */
-}
-
-/* Custom styles for budget table */
-.budget-table-container {
-  background: rgba(45, 55, 72, 0.4);
-  border-radius: 8px;
-  border: 1px solid #4a5568;
-  padding: 15px;
-  margin: 15px 0;
-  backdrop-filter: blur(5px);
-  max-width: 100%; /* Prevent overflow */
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
-}
-
-.budget-table-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(74, 85, 104, 0.5);
-  min-width: 300px; /* Ensure minimum width */
+  justify-content: center;
 }
 
-.budget-table-row:last-child {
-  border-bottom: none;
+/* Custom styles for budget breakdown */
+.stMarkdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0;
 }
 
-.budget-category {
-  font-weight: 600;
-  color: #e2e8f0;
-  flex: 2;
-  white-space: nowrap; /* Prevent text wrapping */
+.stMarkdown table th,
+.stMarkdown table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #4a5568;
 }
 
-.budget-amount {
-  font-weight: 500;
-  color: #90cdf4;
-  flex: 1;
-  text-align: right;
-  white-space: nowrap; /* Prevent text wrapping */
+.stMarkdown table th {
+  background: rgba(26, 32, 44, 0.8);
+  color: #63b3ed;
 }
 
-.budget-percentage {
-  font-weight: 500;
-  color: #a0aec0;
-  flex: 1;
-  text-align: right;
-  white-space: nowrap; /* Prevent text wrapping */
-}
-
-/* Custom styles for itinerary content */
-.itinerary-content {
-  background: rgba(45, 55, 72, 0.4);
-  border-radius: 8px;
-  border: 1px solid #4a5568;
-  padding: 20px;
-  margin: 15px 0;
-  backdrop-filter: blur(5px);
-  line-height: 1.6;
-  max-width: 95%; /* Prevent overflow */
-  overflow-x: auto; /* Allow horizontal scrolling if needed */
+.stMarkdown table tr:hover {
+  background: rgba(45, 55, 72, 0.3);
 }
 
 /* Responsive adjustments */
@@ -458,21 +399,11 @@ footer {
   .stMarkdown,
   .stDataFrame,
   .js-plotly-plot,
-  .budget-table-container,
-  .itinerary-content,
   footer {
-    margin-left: 10px;
-    max-width: 95%; /* Ensure mobile responsiveness */
+    margin: 10px 10px; /* Reduce margins on mobile */
   }
 
-  /* Adjust flex properties for smaller screens */
-  .budget-table-row {
-    min-width: 250px;
-  }
-
-  .budget-category,
-  .budget-amount,
-  .budget-percentage {
-    font-size: 0.9em; /* Smaller font size on mobile */
+  .main {
+    padding: 0 10px; /* Reduce padding on mobile */
   }
 }
