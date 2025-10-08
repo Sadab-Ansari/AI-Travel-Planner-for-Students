@@ -1,31 +1,30 @@
 # config/openai_config.py
 """
 Handles OpenAI API configuration and setup.
-Compatible with both local .env and Streamlit Cloud secrets.
+Works with local .env (optional) and Streamlit Cloud secrets.
 """
 
-import os
 from openai import OpenAI
 
-# Optionally use dotenv locally
+# Try fetching the API key
 try:
-    from dotenv import load_dotenv
-    load_dotenv()
+    # If running on Streamlit Cloud
+    import streamlit as st
+    api_key = st.secrets.get("OPENAI_API_KEY")
 except ImportError:
-    pass  # dotenv not needed on Streamlit Cloud
+    api_key = None
 
-# Try fetching the API key from environment or Streamlit secrets
-api_key = os.getenv("OPENAI_API_KEY")
-
+# Fallback for local development using environment variable
+import os
 if not api_key:
-    try:
-        import streamlit as st
-        api_key = st.secrets["OPENAI_API_KEY"]
-    except (ImportError, KeyError):
-        raise ValueError(
-            "OpenAI API key not found. "
-            "Add it to a .env file locally or to Streamlit secrets."
-        )
+    api_key = os.getenv("OPENAI_API_KEY")
+
+# Check if the API key exists
+if not api_key:
+    raise ValueError(
+        "OpenAI API key not found. "
+        "Add it to Streamlit Secrets or as an environment variable locally."
+    )
 
 # Initialize OpenAI client
 client = OpenAI(api_key=api_key)
