@@ -22,34 +22,6 @@ def render_header():
     </div>
     """, unsafe_allow_html=True)
 
-def render_sidebar():
-    """Render the sidebar with navigation and info."""
-    with st.sidebar:
-        st.markdown(f"""
-        <div style="text-align: center; margin-bottom: 20px;">
-            <h2>{APP_ICON} Student Travel Planner</h2>
-        </div>
-        """, unsafe_allow_html=True)
-        
-        st.markdown("---")
-        
-        st.markdown("### 📝 Quick Tips")
-        st.info("""
-        💡 **Pro Tips:**
-        - Use specific city names for better results
-        - Include your interests for personalized plans
-        - Check weather and safety tabs before packing
-        """)
-        
-        st.markdown("---")
-        
-        st.markdown("### 🆘 Support")
-        st.markdown("Having issues? Check our FAQ or contact support.")
-        
-        # Add user session info if available
-        if 'user_name' in st.session_state:
-            st.success(f"Welcome back, {st.session_state.user_name}! 👋")
-
 def render_travel_form():
     """Render the travel planning form."""
     with st.form(key="travel_form"):
