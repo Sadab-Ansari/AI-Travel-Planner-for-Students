@@ -18,7 +18,10 @@ def display_budget_breakdown():
     
     df = pd.DataFrame(budget_items)
     total_budget = df['amount'].sum()
-    estimated_cost = 580  # This should come from your actual calculations
+    
+    # Fix: Use a more realistic estimated cost instead of hardcoded 580
+    # In a real app, this would come from actual calculations based on user inputs
+    estimated_cost = total_budget * 0.8  # 80% of total budget as estimated cost
     remaining = total_budget - estimated_cost
     
     # Display key metrics
@@ -28,21 +31,21 @@ def display_budget_breakdown():
     with col1:
         st.metric(
             "Total Budget", 
-            f"¥{total_budget:,}",
+            f"₹{total_budget:,}",
             delta=None
         )
     
     with col2:
         st.metric(
             "Estimated Cost", 
-            f"¥{estimated_cost:,}",
-            delta=f"-¥{total_budget - estimated_cost:,}"
+            f"₹{estimated_cost:,.0f}",
+            delta=f"-₹{total_budget - estimated_cost:,.0f}"
         )
     
     with col3:
         st.metric(
             "Remaining", 
-            f"¥{remaining:,}",
+            f"₹{remaining:,.0f}",
             delta_color="inverse" if remaining < 0 else "normal"
         )
     
@@ -78,7 +81,7 @@ def display_budget_breakdown():
         fig_pie.update_traces(
             textposition='inside',
             textinfo='percent+label',
-            hovertemplate="<b>%{label}</b><br>Amount: ¥%{value:,}<br>Percentage: %{percent}",
+            hovertemplate="<b>%{label}</b><br>Amount: ₹%{value:,}<br>Percentage: %{percent}",
             marker=dict(line=dict(color='#ffffff', width=2))
         )
         
@@ -97,7 +100,7 @@ def display_budget_breakdown():
         # Calculate percentages
         df_display = df.copy()
         df_display['percentage'] = (df_display['amount'] / total_budget * 100).round(1)
-        df_display['amount_display'] = df_display['amount'].apply(lambda x: f"¥{x:,}")
+        df_display['amount_display'] = df_display['amount'].apply(lambda x: f"₹{x:,}")
         df_display['percentage_display'] = df_display['percentage'].apply(lambda x: f"{x}%")
         
         # Display as a nice table
@@ -149,7 +152,7 @@ def display_budget_breakdown():
         
         for item in budget_items:
             new_value = st.number_input(
-                f"{item['category']} (¥)",
+                f"{item['category']} (₹)",
                 min_value=0,
                 value=item['amount'],
                 key=f"budget_{item['category']}"

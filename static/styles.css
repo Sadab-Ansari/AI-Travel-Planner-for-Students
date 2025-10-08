@@ -1,0 +1,352 @@
+/* Professional Dark Theme Styles for AI Travel Planner */
+
+/* Main background with gradient */
+body {
+    background: linear-gradient(135deg, #1a202c, #2d3748, #1a202c);
+    color: #e2e8f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Main app container */
+.main {
+    background: linear-gradient(135deg, #1a202c, #2d3748, #1a202c);
+    max-width: 100%;
+    padding-left: 20px; /* Add left margin to all content */
+}
+
+/* Header styling */
+h1, h2, h3, h4, h5, h6 {
+    color: #63b3ed;
+    font-weight: 700;
+}
+
+/* Sidebar styling */
+.sidebar .sidebar-content {
+    background: linear-gradient(to bottom, #2d3748, #1a202c);
+    border-right: 1px solid #4a5568;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form styling */
+.stForm {
+    background: rgba(45, 55, 72, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border: 1px solid #4a5568;
+    margin-bottom: 20px;
+    margin-left: 20px; /* Add left margin */
+}
+
+/* Input fields */
+.stTextInput > div > div > input,
+.stNumberInput > div > div > input,
+.stSelectbox > div > div > select {
+    background-color: rgba(26, 32, 44, 0.8);
+    border: 1px solid #4a5568;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 16px;
+    padding: 12px;
+}
+
+.stTextInput > div > div > input:focus,
+.stNumberInput > div > div > input:focus,
+.stSelectbox > div > div > select:focus {
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 2px rgba(99, 179, 237, 0.3);
+}
+
+/* Buttons */
+.stButton > button {
+    background: linear-gradient(135deg, #3182ce, #63b3ed);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stButton > button:hover {
+    background: linear-gradient(135deg, #2c5aa0, #4a90e2);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.stButton > button:active {
+    transform: translateY(0);
+}
+
+/* Primary button */
+.stButton > button[kind="primary"] {
+    background: linear-gradient(135deg, #38a169, #48bb78);
+}
+
+.stButton > button[kind="primary"]:hover {
+    background: linear-gradient(135deg, #2f855a, #38a169);
+}
+
+/* Metrics and cards */
+.stMetric {
+    background: rgba(45, 55, 72, 0.6);
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #4a5568;
+    margin-left: 20px; /* Add left margin */
+}
+
+/* Tabs */
+.stTabs > div > div > div {
+    background: rgba(45, 55, 72, 0.4);
+    border-radius: 8px 8px 0 0;
+    border: 1px solid #4a5568;
+    border-bottom: none;
+    margin-left: 20px; /* Add left margin */
+}
+
+.stTabs > div > div > div > button {
+    color: #a0aec0;
+    font-weight: 500;
+    padding: 12px 20px;
+}
+
+.stTabs > div > div > div > button[aria-selected="true"] {
+    color: #63b3ed;
+    background: rgba(45, 55, 72, 0.6);
+    border-radius: 8px 8px 0 0;
+}
+
+.stTabs > div > div > div > button:hover {
+    color: #e2e8f0;
+    background: rgba(45, 55, 72, 0.4);
+}
+
+.stTabs > div > div > div > button:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px rgba(99, 179, 237, 0.3);
+}
+
+.stTabs > div > div > div > button:focus:not([aria-selected="true"]) {
+    box-shadow: inset 0 0 0 1px rgba(99, 179, 237, 0.3);
+}
+
+.stTabs > div > div > div > button[aria-selected="true"]:hover {
+    color: #63b3ed;
+    background: rgba(45, 55, 72, 0.6);
+}
+
+.stTabs > div > div > div > button[aria-selected="true"]:focus {
+    box-shadow: inset 0 0 0 2px rgba(99, 179, 237, 0.3);
+}
+
+.stTabs > div > div > div > button[aria-selected="false"]:focus {
+    box-shadow: inset 0 0 0 1px rgba(99, 179, 237, 0.3);
+}
+
+.stTabs > div > div > div > button[aria-selected="false"]:hover {
+    color: #e2e8f0;
+}
+
+/* Tab content */
+.stTabs [data-baseweb="tab-panel"] {
+    background: rgba(45, 55, 72, 0.4);
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #4a5568;
+    padding: 20px;
+    margin-top: -1px;
+    margin-left: 20px; /* Add left margin */
+}
+
+/* Expander */
+.stExpander {
+    background: rgba(45, 55, 72, 0.4);
+    border-radius: 8px;
+    border: 1px solid #4a5568;
+    margin-bottom: 15px;
+    margin-left: 20px; /* Add left margin */
+}
+
+.stExpander > div:first-child {
+    background: rgba(26, 32, 44, 0.6);
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+.stExpander > div:first-child:hover {
+    background: rgba(26, 32, 44, 0.8);
+}
+
+/* Progress bars */
+.stProgress > div > div {
+    background: linear-gradient(90deg, #3182ce, #63b3ed);
+}
+
+/* Info boxes */
+.stAlert-info, .stInfo {
+    background: rgba(49, 130, 206, 0.15);
+    border: 1px solid #3182ce;
+    border-radius: 8px;
+    color: #90cdf4;
+    margin-left: 20px; /* Add left margin */
+}
+
+.stAlert-success, .stSuccess {
+    background: rgba(56, 161, 105, 0.15);
+    border: 1px solid #38a169;
+    border-radius: 8px;
+    color: #9ae6b4;
+    margin-left: 20px; /* Add left margin */
+}
+
+.stAlert-warning, .stWarning {
+    background: rgba(237, 137, 54, 0.15);
+    border: 1px solid #dd6b20;
+    border-radius: 8px;
+    color: #fbd38d;
+    margin-left: 20px; /* Add left margin */
+}
+
+.stAlert-error, .stError {
+    background: rgba(229, 62, 62, 0.15);
+    border: 1px solid #e53e3e;
+    border-radius: 8px;
+    color: #fcbba1;
+    margin-left: 20px; /* Add left margin */
+}
+
+/* Download buttons */
+.stDownloadButton > button {
+    background: linear-gradient(135deg, #805ad5, #b794f6);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stDownloadButton > button:hover {
+    background: linear-gradient(135deg, #6b46c1, #9f7aea);
+}
+
+/* Footer */
+footer {
+    background: rgba(26, 32, 44, 0.8);
+    border-top: 1px solid #4a5568;
+    padding: 20px;
+    margin-top: 30px;
+    border-radius: 10px 10px 0 0;
+    margin-left: 20px; /* Add left margin */
+}
+
+/* Columns */
+.stColumn {
+    padding: 0 10px;
+}
+
+/* Markdown content */
+.stMarkdown {
+    line-height: 1.6;
+    margin-left: 20px; /* Add left margin */
+}
+
+.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
+    color: #63b3ed;
+}
+
+.stMarkdown code {
+    background: rgba(26, 32, 44, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #4a5568;
+}
+
+.stMarkdown pre {
+    background: rgba(26, 32, 44, 0.8);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #4a5568;
+    overflow-x: auto;
+}
+
+/* Tables */
+.stDataFrame {
+    background: rgba(45, 55, 72, 0.4);
+    border-radius: 8px;
+    border: 1px solid #4a5568;
+    margin-left: 20px; /* Add left margin */
+}
+
+.stDataFrame th {
+    background: rgba(26, 32, 44, 0.8);
+    color: #63b3ed;
+}
+
+.stDataFrame td {
+    background: rgba(45, 55, 72, 0.2);
+}
+
+/* Plotly charts */
+.js-plotly-plot {
+    background: rgba(45, 55, 72, 0.4);
+    border-radius: 8px;
+    border: 1px solid #4a5568;
+    padding: 10px;
+    margin-left: 20px; /* Add left margin */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .stForm {
+        padding: 15px;
+    }
+    
+    .stMetric {
+        padding: 10px;
+    }
+    
+    .stTabs [data-baseweb="tab-panel"] {
+        padding: 15px;
+    }
+    
+    .stColumn {
+        padding: 0 5px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    h2 {
+        font-size: 1.5em;
+    }
+    
+    /* Adjust margins for mobile */
+    .main,
+    .stForm,
+    .stMetric,
+    .stTabs > div > div > div,
+    .stTabs [data-baseweb="tab-panel"],
+    .stExpander,
+    .stAlert-info, .stInfo,
+    .stAlert-success, .stSuccess,
+    .stAlert-warning, .stWarning,
+    .stAlert-error, .stError,
+    .stMarkdown,
+    .stDataFrame,
+    .js-plotly-plot,
+    footer {
+        margin-left: 10px;
+    }
+}

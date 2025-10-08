@@ -7,73 +7,36 @@ from utils.budget_utils import display_budget_breakdown
 from utils.packing_utils import generate_packing_list, display_packing_checklist
 from utils.weather_utils import get_weather_forecast, display_weather_forecast, get_weather_packing_tips
 from utils.safety_utils import display_safety_dashboard
+from components.ui_components import apply_custom_styles, render_header, render_sidebar, render_travel_form, render_welcome_section, render_footer
+from config.constants import APP_NAME, APP_ICON
 import matplotlib.pyplot as plt
 
 # ------------------------
 # Streamlit App UI
 # ------------------------
 st.set_page_config(
-    page_title="🎒 AI Travel Planner for Students", 
-    page_icon="✈️", 
+    page_title=APP_NAME, 
+    page_icon=APP_ICON, 
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Sidebar for navigation and info
-with st.sidebar:
-    st.title("🎒 Student Travel Planner")
-    st.markdown("---")
-    st.markdown("### Quick Tips")
-    st.info("💡 **Pro Tips:**\n- Use specific city names for better results\n- Include your interests for personalized plans\n- Check weather and safety tabs before packing")
-    
-    st.markdown("---")
-    st.markdown("### Support")
-    st.markdown("Having issues? Check our FAQ or contact support.")
-    
-    # Add user session info if available
-    if 'user_name' in st.session_state:
-        st.success(f"Welcome back, {st.session_state.user_name}! 👋")
+# Apply custom styles
+apply_custom_styles()
 
-# Main content area
-st.title("🎒 AI Travel Planner for Students")
-st.markdown("Plan budget-friendly, personalized trips in seconds! ✈️")
+# Render sidebar
+render_sidebar()
+
+# Render header
+render_header()
 
 # ------------------------
 # User Inputs
 # ------------------------
-with st.form(key="travel_form"):
-    st.subheader("📍 Trip Details")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        destination = st.text_input("Destination*", placeholder="Goa, Manali, Jaipur", help="Enter city or popular destination")
-        starting_location = st.text_input("Starting Location*", placeholder="Mumbai, Delhi, Bangalore")
-        duration_days = st.number_input("Duration (days)*", min_value=1, max_value=30, value=3, help="1-30 days")
-        budget = st.number_input("Budget (₹)*", min_value=500, value=5000, step=500, help="Total trip budget")
-    
-    with col2:
-        group_type = st.selectbox("Group Type*", ["Solo", "Friends", "Couple", "Family"])
-        travel_mode = st.selectbox("Travel Mode*", ["Train", "Bus", "Flight", "Car", "Bike"])
-        stay_preference = st.selectbox("Stay Preference*", ["Hostel", "Budget Hotel", "Airbnb", "Luxury Hotel"])
-        food_preference = st.selectbox("Food Preference*", ["Veg", "Non-Veg", "Mix", "Vegan"])
-    
-    st.subheader("🎯 Preferences (Optional)")
-    col3, col4 = st.columns(2)
-    with col3:
-        interests = st.text_input("Interests / Activities", placeholder="Beaches, Adventure, Foodie, Photography")
-        travel_goal = st.text_input("Travel Goal", placeholder="Refresh, College Trip, Photography")
-    with col4:
-        weather_preference = st.text_input("Weather Preference", placeholder="Cold, Moderate, Warm")
-        special_conditions = st.text_input("Special Conditions", placeholder="Female-only group, no night travel, wheelchair accessible")
-    
-    # Form submission
-    submit_col1, submit_col2, submit_col3 = st.columns([1, 2, 1])
-    with submit_col2:
-        submit_button = st.form_submit_button(
-            label="🚀 Generate Travel Plan", 
-            use_container_width=True,
-            type="primary"
-        )
+form_data = render_travel_form()
+(destination, starting_location, duration_days, budget, group_type, 
+ travel_mode, stay_preference, food_preference, interests, travel_goal, 
+ weather_preference, special_conditions, submit_button) = form_data
 
 # Required fields validation
 def validate_inputs():
@@ -96,64 +59,7 @@ if submit_button:
         st.stop()
     
     with st.spinner("🤖 Generating your personalized travel plan..."):
-        # Show route map first
-        if starting_location and destination:
-            with st.spinner("🗺️ Calculating route and generating map..."):
-                try:
-                    # Get coordinates for both locations
-                    start_coords = get_coordinates(starting_location)
-                    dest_coords = get_coordinates(destination)
-                    
-                    if start_coords and dest_coords:
-                        st.subheader("📍 Route Overview")
-                        
-                        # Calculate approximate distance
-                        distance_km = calculate_distance(start_coords, dest_coords)
-                        
-                        # Display route info in columns
-                        info_col1, info_col2, info_col3 = st.columns(3)
-                        with info_col1:
-                            st.metric("📍 Distance", f"{distance_km:.1f} km")
-                        with info_col2:
-                            # Show travel time estimate
-                            if travel_mode == "Train":
-                                approx_time = distance_km / 50  # avg train speed
-                            elif travel_mode == "Bus":
-                                approx_time = distance_km / 40  # avg bus speed  
-                            elif travel_mode == "Flight":
-                                approx_time = distance_km / 500  # avg flight speed
-                            elif travel_mode == "Car":
-                                approx_time = distance_km / 60
-                            else:  # Bike
-                                approx_time = distance_km / 30
-                            
-                            st.metric("⏱️ Travel Time", f"{approx_time:.1f} hours")
-                        with info_col3:
-                            st.metric("🚗 Travel Mode", travel_mode)
-                        
-                        # Try interactive map first, fallback to static map
-                        try:
-                            # Create and display interactive Folium map
-                            folium_map = create_folium_map(start_coords, dest_coords, starting_location, destination)
-                            display_map_in_streamlit(folium_map)
-                            st.caption("🗺️ Interactive Map - You can zoom and pan for detailed view")
-                        except Exception as map_error:
-                            st.warning("🔄 Using static map - interactive features unavailable")
-                            # Fallback to static map
-                            static_fig = create_static_map(start_coords, dest_coords, starting_location, destination)
-                            st.pyplot(static_fig)
-                            st.caption("📍 Static Route Map")
-                        
-                        # Store distance and time for download button
-                        st.session_state.distance_km = distance_km
-                        st.session_state.approx_time = approx_time
-                    else:
-                        st.warning("⚠️ Could not find coordinates for the locations. Check spelling and try using major city names.")
-                        
-                except Exception as e:
-                    st.warning(f"⚠️ Could not generate route map: {str(e)[:100]}... but itinerary will still be created.")
-
-        # Generate itinerary
+        # Generate itinerary first (without showing map initially)
         prompt = build_travel_prompt(
             destination=destination,
             duration_days=duration_days,
@@ -260,28 +166,72 @@ if submit_button:
                 display_safety_dashboard(destination, group_type, special_conditions)
                 
             with map_tab:
-                # Show map again in its own tab
+                # Show route map in its own tab
+                st.subheader("📍 Route Overview")
+                
                 if starting_location and destination:
-                    try:
-                        start_coords = get_coordinates(starting_location)
-                        dest_coords = get_coordinates(destination)
-                        if start_coords and dest_coords:
-                            folium_map = create_folium_map(start_coords, dest_coords, starting_location, destination)
-                            display_map_in_streamlit(folium_map)
+                    with st.spinner("🗺️ Calculating route and generating map..."):
+                        try:
+                            # Get coordinates for both locations
+                            start_coords = get_coordinates(starting_location)
+                            dest_coords = get_coordinates(destination)
                             
-                            # Additional map controls
-                            with st.expander("🗺️ Map Controls"):
-                                st.info("""
-                                **Map Features:**
-                                - Zoom in/out for detailed view
-                                - Click on markers for location info
-                                - Pan around to explore the route
-                                - Blue line shows approximate route
-                                """)
-                        else:
-                            st.info("📍 Map unavailable. Check the main itinerary for route details.")
-                    except Exception as e:
-                        st.error(f"❌ Map loading failed: {str(e)}")
+                            if start_coords and dest_coords:
+                                # Calculate approximate distance
+                                distance_km = calculate_distance(start_coords, dest_coords)
+                                
+                                # Display route info in columns
+                                info_col1, info_col2, info_col3 = st.columns(3)
+                                with info_col1:
+                                    st.metric("📍 Distance", f"{distance_km:.1f} km")
+                                with info_col2:
+                                    # Show travel time estimate
+                                    if travel_mode == "Train":
+                                        approx_time = distance_km / 50  # avg train speed
+                                    elif travel_mode == "Bus":
+                                        approx_time = distance_km / 40  # avg bus speed  
+                                    elif travel_mode == "Flight":
+                                        approx_time = distance_km / 500  # avg flight speed
+                                    elif travel_mode == "Car":
+                                        approx_time = distance_km / 60
+                                    else:  # Bike
+                                        approx_time = distance_km / 30
+                                    
+                                    st.metric("⏱️ Travel Time", f"{approx_time:.1f} hours")
+                                with info_col3:
+                                    st.metric("🚗 Travel Mode", travel_mode)
+                                
+                                # Try interactive map first, fallback to static map
+                                try:
+                                    # Create and display interactive Folium map
+                                    folium_map = create_folium_map(start_coords, dest_coords, starting_location, destination)
+                                    display_map_in_streamlit(folium_map)
+                                    st.caption("🗺️ Interactive Map - You can zoom and pan for detailed view")
+                                except Exception as map_error:
+                                    st.warning("🔄 Using static map - interactive features unavailable")
+                                    # Fallback to static map
+                                    static_fig = create_static_map(start_coords, dest_coords, starting_location, destination)
+                                    st.pyplot(static_fig)
+                                    st.caption("📍 Static Route Map")
+                                
+                                # Store distance and time for download button
+                                st.session_state.distance_km = distance_km
+                                st.session_state.approx_time = approx_time
+                                
+                                # Additional map controls
+                                with st.expander("🗺️ Map Controls"):
+                                    st.info("""
+                                    **Map Features:**
+                                    - Zoom in/out for detailed view
+                                    - Click on markers for location info
+                                    - Pan around to explore the route
+                                    - Blue line shows approximate route
+                                    """)
+                            else:
+                                st.warning("⚠️ Could not find coordinates for the locations. Check spelling and try using major city names.")
+                                
+                        except Exception as e:
+                            st.warning(f"⚠️ Could not generate route map: {str(e)[:100]}... but itinerary will still be created.")
                 else:
                     st.info("📍 Enter starting location and destination to see the route map")
                 
@@ -297,57 +247,9 @@ if submit_button:
 # Welcome Section (when no submission)
 # ------------------------
 else:
-    st.markdown("---")
-    
-    # Features overview
-    st.subheader("🚀 Why Use AI Travel Planner?")
-    
-    feature_col1, feature_col2, feature_col3 = st.columns(3)
-    
-    with feature_col1:
-        st.markdown("### 💰 Budget Smart")
-        st.write("Get cost-effective plans tailored to student budgets with real-time budget tracking.")
-    
-    with feature_col2:
-        st.markdown("### 🎯 Personalized")
-        st.write("AI-powered itineraries based on your interests, group type, and preferences.")
-    
-    with feature_col3:
-        st.markdown("### 🛡️ Safety First")
-        st.write("Safety recommendations and emergency info specific to your destination.")
-    
-    st.markdown("---")
-    
-    # Quick examples
-    st.subheader("🎯 Popular Student Destinations")
-    example_col1, example_col2, example_col3 = st.columns(3)
-    
-    with example_col1:
-        st.markdown("**🏖️ Beach Trip**")
-        st.caption("Goa • 4 days • ₹8000")
-        st.markdown("*Friends group • Hostels • Beach parties*")
-    
-    with example_col2:
-        st.markdown("**🏔️ Adventure Trip**")
-        st.caption("Manali • 5 days • ₹10000") 
-        st.markdown("*Couple • Airbnb • Trekking*")
-    
-    with example_col3:
-        st.markdown("**🏛️ Heritage Trip**")
-        st.caption("Jaipur • 3 days • ₹6000")
-        st.markdown("*Solo • Budget hotel • Photography*")
-    
-    st.markdown("---")
-    st.info("💡 **Ready to plan?** Fill out the form above and click 'Generate Travel Plan'!")
+    render_welcome_section()
 
 # ------------------------
 # Footer
 # ------------------------
-st.markdown("---")
-footer_col1, footer_col2, footer_col3 = st.columns([2, 1, 1])
-with footer_col1:
-    st.caption("🎒 AI Travel Planner for Students • Built with ❤️ for student travelers")
-with footer_col2:
-    st.caption("[Report Issue](https://github.com/your-repo/issues)")
-with footer_col3:
-    st.caption("[Privacy Policy](#)")
+render_footer()
