@@ -1,0 +1,31 @@
+# Python cache and bytecode files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment folder
+venv/
+env/
+.venv/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment variables / secrets
+.env
+
+# Streamlit cache
+.streamlit/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Jupyter Notebook checkpoints (if any)
+.ipynb_checkpoints/
+
+# PyCharm / VS Code settings
+.idea/
+.vscode/
